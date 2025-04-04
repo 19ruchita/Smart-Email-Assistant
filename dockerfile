@@ -1,26 +1,32 @@
-# Use an openjdk 21 base image for building the application
+# Use OpenJDK 21 as the base image for building
 FROM openjdk:21-jdk-slim as build
+
+# Install Maven (since it's not pre-installed in openjdk images)
+RUN apt update && apt install -y maven
 
 # Set the working directory in the container
 WORKDIR /app
 
-# Copy the Maven project file into the container
-COPY pom.xml ./
+# Copy only backend files from email-writer
+COPY email-writer/pom.xml .
 
-# Download the dependencies
+# Download dependencies
 RUN mvn dependency:go-offline
 
-# Copy the entire project into the container
-COPY src /app/src
+# Copy the backend source code
+COPY email-writer/src ./src
 
-# Package the app using Maven
+# Build the application
 RUN mvn clean package -DskipTests
 
-# Use openjdk 21 image to run the app
+# Use OpenJDK 21 as the runtime image
 FROM openjdk:21-jdk-slim
 
-# Copy the built jar file from the previous step
-COPY --from=build /app/target/smart-email-assistant.jar /smart-email-assistant.jar
+# Copy the built JAR file
+COPY --from=build /app/target/*.jar /app.jar
 
-# Set the command to run the jar
-CMD ["java", "-jar", "/smart-email-assistant.jar"]
+# Expose the application port (if needed)
+EXPOSE 8080
+
+# Run the application
+CMD ["java", "-jar", "/app.jar"]
