@@ -1,0 +1,6 @@
+*.log
+*.md
+*.iml
+.idea
+.git
+target/
