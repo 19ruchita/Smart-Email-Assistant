@@ -42,8 +42,8 @@ yarn-error.log*
 HELP.md
 target/
 !.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
+!/src/main//target/
+!/src/test//target/
 
 # Spring Tool Suite (STS)
 .apt_generated
@@ -59,13 +59,3 @@ target/
 
 # Coverage reports
 coverage/
-
-echo "AppData/" >> .gitignore
-echo "Documents/" >> .gitignore
-echo "Local Settings/" >> .gitignore
-echo "Cookies/" >> .gitignore
-echo "Recent/" >> .gitignore
-echo "SendTo/" >> .gitignore
-echo "Start Menu/" >> .gitignore
-echo "Templates/" >> .gitignore
-
