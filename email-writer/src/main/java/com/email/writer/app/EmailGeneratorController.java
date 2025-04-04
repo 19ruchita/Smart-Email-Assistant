@@ -12,11 +12,18 @@ public class EmailGeneratorController {
 
     private final EmailGeneratorService emailGeneratorService;
 
+    @GetMapping("/")
+    public ResponseEntity<String> home() 
+    {
+        return ResponseEntity.ok("Backend is running. Use API endpoints.");
+    }
+    
+    
     @GetMapping("/test")
     public ResponseEntity<String> test() {
         return ResponseEntity.ok("Controller is working fine!");
     }
-
+    
     @PostMapping("/generate")
     public ResponseEntity<String> generateEmail(@RequestBody EmailRequest emailRequest) {
         String response = emailGeneratorService.generateEmailReply(emailRequest);
