@@ -13,9 +13,8 @@ public class EmailGeneratorController {
     private final EmailGeneratorService emailGeneratorService;
 
     @GetMapping("/")
-    public ResponseEntity<String> home() 
-    {
-        return ResponseEntity.ok("Backend is running. Use API endpoints.");
+    public String healthCheck() {
+        return "Server is awake!";
     }
     
     
