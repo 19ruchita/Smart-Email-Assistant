@@ -7,12 +7,12 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/email")
 @AllArgsConstructor
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "https://smart-email-assistant.vercel.app/")
 public class EmailGeneratorController {
 
     private final EmailGeneratorService emailGeneratorService;
 
-    @GetMapping("")
+    @GetMapping("/")
     public String healthCheck() {
         return "Server is awake!";
     }
