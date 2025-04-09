@@ -1,7 +1,26 @@
 import { useState } from 'react'
 import './App.css'
-import { Box, Button, CircularProgress, Container, FormControl, Input, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material';
+import { Box, Button, CircularProgress, Container, FormControl, Input, InputLabel, MenuItem, Select, TextField, Typography, Paper } from '@mui/material';
 import axios from 'axios';
+import { ThemeProvider } from './context/ThemeContext';
+import { useTheme } from './context/ThemeContext';
+
+const ThemeToggle = () => {
+  const { isDark, toggleTheme } = useTheme();
+  
+  return (
+    <button
+      onClick={toggleTheme}
+      className="fixed top-4 right-4 p-2 rounded-full"
+      style={{
+        backgroundColor: isDark ? '#374151' : '#f3f4f6',
+        color: isDark ? '#f3f4f6' : '#1f2937',
+      }}
+    >
+      {isDark ? '🌞' : '🌙'}
+    </button>
+  );
+};
 
 function App() {
   const [emailContent, setEmailContent] = useState('');
@@ -51,7 +70,7 @@ function App() {
               label={"Tone (Optional)"}
               onChange={(e) => setTone(e.target.value)}>
                 <MenuItem value="">None</MenuItem>
-                <MenuItem value="professional">Professional</MenuItem>
+                <MenuItem value="professional">Professional</MenuItem> 
                 <MenuItem value="casual">Casual</MenuItem>
                 <MenuItem value="friendly">Friendly</MenuItem>
             </Select>
@@ -72,27 +91,50 @@ function App() {
         </Typography>
       )}
 
-      {generatedReply && (
-       <Box sx={{ mt: 3}}>
-          <Typography variant='h6' gutterBottom>
-            Generated Reply:
-          </Typography>
-          <TextField
-            fullWidth
-            multiline
-            rows={6}
-            variant='outlined'
-            value={generatedReply || ''}
-            inputProps={{ readOnly: true }}/>
+      <Box sx={{ mt: 4 }}>
+        <Typography variant='h6' gutterBottom sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          Live Preview
+          {generatedReply && (
+            <Button
+              variant='outlined'
+              size="small"
+              onClick={() => navigator.clipboard.writeText(generatedReply)}>
+              Copy to Clipboard
+            </Button>
+          )}
+        </Typography>
         
-        <Button
-          variant='outlined'
-          sx={{ mt: 2 }}
-          onClick={() => navigator.clipboard.writeText(generatedReply)}>
-            Copy to Clipboard
-        </Button>
-       </Box> 
-      )}
+        <Paper 
+          elevation={3} 
+          sx={{ 
+            p: 3,
+            backgroundColor: '#fff',
+            borderRadius: 2,
+            minHeight: '200px',
+            display: 'flex',
+            alignItems: loading ? 'center' : 'flex-start',
+            justifyContent: loading ? 'center' : 'flex-start',
+            '& pre': {
+              whiteSpace: 'pre-wrap',
+              wordWrap: 'break-word',
+              margin: 0,
+              fontFamily: 'inherit',
+              fontSize: '1rem',
+              width: '100%'
+            }
+          }}
+        >
+          {loading ? (
+            <CircularProgress />
+          ) : generatedReply ? (
+            <pre>{generatedReply}</pre>
+          ) : (
+            <Typography color="text.secondary" sx={{ fontStyle: 'italic' }}>
+              Your generated reply will appear here...
+            </Typography>
+          )}
+        </Paper>
+      </Box>
     </Container>
   )
 }
