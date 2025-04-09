@@ -12,7 +12,7 @@ public class EmailGeneratorController {
 
     private final EmailGeneratorService emailGeneratorService;
 
-    @GetMapping("/")
+    @GetMapping("")
     public String healthCheck() {
         return "Server is awake!";
     }
